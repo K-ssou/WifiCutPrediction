@@ -10,21 +10,22 @@ from torch.utils.data import Dataset
 import random
 import math
 
-
+#Define our own loss to weight the loss
+#Give a higher weight to penalize the non-detection of a cut
 class customloss(torch.nn.Module):
     def __init__(self):
         super(customloss, self).__init__()
 
     def forward(self, pred, tensor_y):
-        eps = 0.4
+        eps = 0.4 #Accept the prediction if |pred - real|<eps
         diff = abs(pred - tensor_y)
         mask_diff = (diff >= eps).float()
         mask_cut = (tensor_y == 1).float()
 
-        loss_val = (200 * mask_cut + 10) * mask_diff * diff
+        loss_val = (200 * mask_cut + 10) * mask_diff * diff #Change the values of weight
         return torch.sum(loss_val)
 
-
+#Parse the cut file in tensor for the network
 def Parser(filename):
     X = []
     y = []
@@ -45,7 +46,7 @@ def Parser(filename):
         X.append(data)
     return (X, y)
 
-
+#File to open 
 # IMEI = "bd0d04ef821fa7df8de5a4f1b0d2633d704809f1acd6b3faf780e560c5af4278"
 # IMEI = "677aba9f4c7375c0ac5443d680b6114cd0d36983342aca01e84e8afd907396ec"
 IMEI = "63cdb165eda519857699323789e720c662592e869104383a4523c15198b5f510"
@@ -53,7 +54,7 @@ filename = "/home/cgilet/Résultats/ADA_cuts_{}.txt".format(IMEI[:4])
 
 X, Y = Parser(filename)
 
-# Division de l'ensemble de données en train(80%) et test(20%)
+# Divide all the data in test set (20%) and train set (80%)
 idx_test = math.floor(80 * len(X) / 100)
 X_train = X[:idx_test]
 X_test = X[idx_test:]
@@ -62,7 +63,7 @@ Y_test = Y[idx_test:]
 
 nbelt = len(X[0])
 
-# Normalisation des données
+# Normalize data
 moy_X = np.mean(X_train, 0)
 sigma_X = np.std(X_train, 0)
 X_train = (X_train - moy_X) / sigma_X
@@ -102,6 +103,7 @@ print(model)
 loss_fn = customloss()
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
 y_t = torch.tensor(Y_test).float()
+#Count the number of 0 and 1 (cuts)
 nb_0 = torch.sum((y_t == 0.0).float())
 nb_1 = torch.sum((y_t == 1.0).float())
 
@@ -124,6 +126,7 @@ for epoch_num in range(nb_epoch):
         loss.backward()
         optimizer.step()
     print("Test")
+    
     bonne_pred_0 = 0
     bonne_pred_1 = 0
     for idx in range(len(X_test)):
@@ -132,19 +135,21 @@ for epoch_num in range(nb_epoch):
 
         pred = model(tensor_x)
         loss = loss_fn(pred, tensor_y)
+        #Count the good predictions
         if loss == 0.0 and tensor_y[0] == 0.0:
             bonne_pred_0 += 1
         if loss == 0.0 and tensor_y[0] == 1.0:
             bonne_pred_1 += 1
         if idx % 100 == 0:
             print(f"loss: {loss.item():>7f}")
+    #Calcul the accuracy
     acc_0 = bonne_pred_0 / nb_0 * 100
     acc_1 = bonne_pred_1 / nb_1 * 100
     print(f"acc 0 Epoch n°{epoch_num} ={acc_0}%")
     print(f"acc 1 Epoch n°{epoch_num} ={acc_1}%")
 
 
-#######################TEST###########################################
+####################### TEST ###########################################
 # test = [[0.0, 1.0, 0.0, 1.0, 4.0, 3.0, 0.0, 0.0, 1.0, 35.0]] #OK
 # test = [[0.0, 1.0, 0.0, 0.0, 3.0, 11.0, 1.0, 0.0, 0.0, 60.0]] #OK
 # test = [[1.0, 1.0, 0.0, 0.0, 3.0, 1.0, 0.0, 0.0, 0.0, 61.0]] #Pas OK
@@ -155,13 +160,3 @@ for epoch_num in range(nb_epoch):
 # print(model(test).item())
 #######################################################################
 
-
-######################## A TESTER ####################################
-# reduction de dimension
-# AdaBoost
-# Simplifier les données
-# Changer ensemble de test
-# Ajouter des données qui calculent depuis cb de tmps pas de 1, prédire dans cb de temps on aura le prochain 1.
-# Ajouter la puissance du wifi dans les données
-# gyro/géo
-# /!\ Faire une doc à mettre en ligne /!\

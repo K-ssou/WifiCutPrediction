@@ -49,11 +49,12 @@ def Parser(filename):
 # IMEI = "bd0d04ef821fa7df8de5a4f1b0d2633d704809f1acd6b3faf780e560c5af4278"
 # IMEI = "677aba9f4c7375c0ac5443d680b6114cd0d36983342aca01e84e8afd907396ec"
 IMEI = "63cdb165eda519857699323789e720c662592e869104383a4523c15198b5f510"
-filename = "/home/cgilet/Codes/Reseau3/Donnees/ADA_cuts_{}.txt".format(IMEI[:4])
+filename = "/home/cgilet/Codes/Reseau3/Donnees/ADA_cuts_{}.txt".format(
+    IMEI[:4])
 
 X, Y = Parser(filename)
 
-# Division de l'ensemble de données en train(80%) et test(20%)
+# Divide data in training set (80%) and test set (20%)
 idx_test = math.floor(20 * len(X) / 100)
 X_train = X[idx_test:]
 X_test = X[:idx_test]
@@ -62,7 +63,7 @@ Y_test = Y[:idx_test]
 
 nbelt = len(X[0])
 
-# Normalisation des données
+# Normalize
 moy_X = np.mean(X_train, 0)
 sigma_X = np.std(X_train, 0)
 X_train = (X_train - moy_X) / sigma_X
@@ -74,6 +75,8 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 print("Using {} device".format(device))
 
 # Define model
+
+
 class NeuralNetwork(nn.Module):
     def __init__(self):
         super(NeuralNetwork, self).__init__()
@@ -154,14 +157,3 @@ for epoch_num in range(nb_epoch):
 # test = torch.tensor(test).float()
 # print(model(test).item())
 #######################################################################
-
-
-######################## A TESTER ####################################
-# reduction de dimension
-# AdaBoost
-# Simplifier les données
-# Changer ensemble de test
-# Ajouter des données qui calculent depuis cb de tmps pas de 1, prédire dans cb de temps on aura le prochain 1.
-# Ajouter la puissance du wifi dans les données
-# gyro/géo
-# /!\ Faire une doc à mettre en ligne /!\
