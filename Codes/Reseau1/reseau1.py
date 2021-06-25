@@ -1,3 +1,5 @@
+# /usr/bin/python /home/cgilet/Codes/Reseau1/reseau1.py
+
 import sys
 import torch
 import numpy as np
@@ -10,22 +12,25 @@ from torch.utils.data import Dataset
 import random
 import math
 
-#Define our own loss to weight the loss
-#Give a higher weight to penalize the non-detection of a cut
+# Define our own loss to weight the loss
+# Give a higher weight to penalize the non-detection of a cut
 class customloss(torch.nn.Module):
     def __init__(self):
         super(customloss, self).__init__()
 
     def forward(self, pred, tensor_y):
-        eps = 0.4 #Accept the prediction if |pred - real|<eps
+        eps = 0.4  # Accept the prediction if |pred - real|<eps
         diff = abs(pred - tensor_y)
         mask_diff = (diff >= eps).float()
         mask_cut = (tensor_y == 1).float()
 
-        loss_val = (200 * mask_cut + 10) * mask_diff * diff #Change the values of weight
+        loss_val = (
+            (200 * mask_cut + 10) * mask_diff * diff
+        )  # Change the values of weight
         return torch.sum(loss_val)
 
-#Parse the cut file in tensor for the network
+
+# Parse the cut file in tensor for the network
 def Parser(filename):
     X = []
     y = []
@@ -46,11 +51,12 @@ def Parser(filename):
         X.append(data)
     return (X, y)
 
-#File to open 
+
+# File to open
 # IMEI = "bd0d04ef821fa7df8de5a4f1b0d2633d704809f1acd6b3faf780e560c5af4278"
 # IMEI = "677aba9f4c7375c0ac5443d680b6114cd0d36983342aca01e84e8afd907396ec"
 IMEI = "63cdb165eda519857699323789e720c662592e869104383a4523c15198b5f510"
-filename = "/home/cgilet/Résultats/ADA_cuts_{}.txt".format(IMEI[:4])
+filename = "/home/cgilet/Codes/Reseau1/Data/ADA_cuts_{}.txt".format(IMEI[:4])
 
 X, Y = Parser(filename)
 
@@ -103,7 +109,7 @@ print(model)
 loss_fn = customloss()
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
 y_t = torch.tensor(Y_test).float()
-#Count the number of 0 and 1 (cuts)
+# Count the number of 0 and 1 (cuts)
 nb_0 = torch.sum((y_t == 0.0).float())
 nb_1 = torch.sum((y_t == 1.0).float())
 
@@ -126,7 +132,7 @@ for epoch_num in range(nb_epoch):
         loss.backward()
         optimizer.step()
     print("Test")
-    
+
     bonne_pred_0 = 0
     bonne_pred_1 = 0
     for idx in range(len(X_test)):
@@ -135,14 +141,14 @@ for epoch_num in range(nb_epoch):
 
         pred = model(tensor_x)
         loss = loss_fn(pred, tensor_y)
-        #Count the good predictions
+        # Count the good predictions
         if loss == 0.0 and tensor_y[0] == 0.0:
             bonne_pred_0 += 1
         if loss == 0.0 and tensor_y[0] == 1.0:
             bonne_pred_1 += 1
         if idx % 100 == 0:
             print(f"loss: {loss.item():>7f}")
-    #Calcul the accuracy
+    # Calcul the accuracy
     acc_0 = bonne_pred_0 / nb_0 * 100
     acc_1 = bonne_pred_1 / nb_1 * 100
     print(f"acc 0 Epoch n°{epoch_num} ={acc_0}%")
@@ -159,4 +165,3 @@ for epoch_num in range(nb_epoch):
 # test = torch.tensor(test).float()
 # print(model(test).item())
 #######################################################################
-

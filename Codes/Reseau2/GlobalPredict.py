@@ -1,4 +1,4 @@
-# /usr/bin/python2 /home/cgilet/Codes/Reseau3/GlobalPredict.py /home/cgilet/Codes/Reseau3/2phones.txt ADA
+# /usr/bin/python2 /home/cgilet/Codes/Reseau2/GlobalPredict.py /home/cgilet/Codes/Reseau2/2phones.txt ADA
 
 # script that launches a prediction algorithm for all phones
 

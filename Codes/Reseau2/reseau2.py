@@ -1,4 +1,4 @@
-# /usr/bin/python /home/cgilet/Codes/Reseau3/reseau3.py
+# /usr/bin/python /home/cgilet/Codes/Reseau2/reseau2.py
 
 import sys
 import torch
@@ -23,7 +23,7 @@ class customloss(torch.nn.Module):
         mask_diff = (diff >= eps).float()
         mask_cut = (tensor_y == 1).float()
 
-        loss_val = (50 * mask_cut + 1) * mask_diff * diff
+        loss_val = (25 * mask_cut + 1) * mask_diff * diff
         return torch.sum(loss_val)
 
 
@@ -33,10 +33,12 @@ def Parser(filename):
     f = open(filename, "r")
     text = f.readlines()
     l = len(text)
-    for i in range(l - 1):
-        line = text[i]
+    for i in range(l - 2):
+        line1 = text[i]
+        line2 = text[i + 1]
+        line = line1 + line2
         line = line.replace("\n", "")
-        result = text[i + 1]
+        result = text[i + 2]
         result = result.replace("\n", "")
         bouts_line = line.split(" ")
         bouts_res = result.split(" ")
@@ -51,20 +53,20 @@ def Parser(filename):
 # IMEI = "bd0d04ef821fa7df8de5a4f1b0d2633d704809f1acd6b3faf780e560c5af4278"
 # IMEI = "677aba9f4c7375c0ac5443d680b6114cd0d36983342aca01e84e8afd907396ec"
 IMEI = "63cdb165eda519857699323789e720c662592e869104383a4523c15198b5f510"
-filename = "/home/cgilet/Codes/Reseau3/Data/ADA_cuts_{}.txt".format(IMEI[:4])
+filename = "/home/cgilet/Codes/Reseau2/Data/ADA_cuts_{}.txt".format(IMEI[:4])
 
 X, Y = Parser(filename)
 
-# Divide data in training set (80%) and test set (20%)
-idx_test = math.floor(20 * len(X) / 100)
-X_train = X[idx_test:]
-X_test = X[:idx_test]
-Y_train = Y[idx_test:]
-Y_test = Y[:idx_test]
+# Division de l'ensemble de données en train(80%) et test(20%)
+idx_test = math.floor(80 * len(X) / 100)
+X_train = X[:idx_test]
+X_test = X[idx_test:]
+Y_train = Y[:idx_test]
+Y_test = Y[idx_test:]
 
 nbelt = len(X[0])
 
-# Normalize
+# Normalisation des données
 moy_X = np.mean(X_train, 0)
 sigma_X = np.std(X_train, 0)
 X_train = (X_train - moy_X) / sigma_X
@@ -76,8 +78,6 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 print("Using {} device".format(device))
 
 # Define model
-
-
 class NeuralNetwork(nn.Module):
     def __init__(self):
         super(NeuralNetwork, self).__init__()
@@ -157,4 +157,3 @@ for epoch_num in range(nb_epoch):
 # test = (test - moy_X) / sigma_X
 # test = torch.tensor(test).float()
 # print(model(test).item())
-#######################################################################

@@ -1,5 +1,9 @@
+Launch : /usr/bin/python2 /home/cgilet/Codes/Reseau3/GlobalPredict.py /home/cgilet/Codes/Reseau3/2phones.txt ADA
+Copy results in Data
+/usr/bin/python /home/cgilet/Codes/Reseau3/reseau3.py
+
 We used the script GlobalPredict to recover features. All the features are calculated and collected with the Prediction_Wifi_ADA.py script.
-readPhones.y and our API.py are functions used by the previous script.
+readPhones.py and ourAPI.py are functions used by the previous script.
 ParserXy.py take a cut file in Data and transform it to the right format for the neural network.
 
 

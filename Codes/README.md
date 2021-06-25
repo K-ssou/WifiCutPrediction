@@ -2,7 +2,7 @@
 
 - Reseau1 is a folder containing all data and script to make the first neural network. This network uses for each measurment of a phone the following features : 
     -There is a cut during this slot? (0/1)
-    -Wich type of connection (Wifi/3G) (0/1)
+    -Wich type of connexion (Wifi/3G) (0/1)
     -Are we connected to the home API? (0/1)
     -Are we connected to the work API? (0/1)
     -Day of the week (0-6)
@@ -16,6 +16,6 @@
  - Reseau2 is the same folder but network change.
  We give him 2 consecutives measurment and it try to define if there is a cut during the third slot.
 
- - Reseau3 : In this network, we tried to simplify the features. We keep only features about date (day and slot), cuts and type of connection
+ - Reseau3 : In this network, we tried to simplify the features. We keep only features about date (day and slot), cuts and type of connexion
 
- - RNN : We want totry with a RNN to improve the prediction. There is only a test of words prediction. Nothing to do with our project.
+ - RNN : We want to try with a RNN to improve the prediction. There is only a test of words prediction. Nothing to do with our project.
