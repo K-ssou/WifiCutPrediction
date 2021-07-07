@@ -30,3 +30,5 @@ TrainAcc = 96.25711960943858%
 TestAcc = 96.1366409109394%
 RandomForest
 TestAcc = 0.9605530703538023%
+
+Slot : 15mn 

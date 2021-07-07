@@ -1,6 +1,17 @@
 In the Codes folder, you will find the different scripts that were used to retrieve our data from the database.
 
 In the Data folder, we have grouped together all the files containing our data, and in particular the ADA_cuts_IMEI.txt file which, after processing, serves as input and validation for our neural network.
+This file contains the following features:
+-Cut during this slot? (0/1)
+-Type of connexion (0=3G/1=Wifi)
+-Connected to the HomeWifi? (0/1)
+-Connected to the WorkWifi? (0/1)
+-Day (0-6)
+-Number of Apslots
+-Top 1 Wifi in list of Apslots? (0/1)
+-Top 2 Wifi in list of Apslots? (0/1)
+-Top 3 Wifi in list of Apslots? (0/1)
+-Number of the Slot
 
 reseau1.py is the code that parses our data, builds a neural network and trains it.
 
@@ -16,7 +27,7 @@ Next, we divide our data set into training set and test set and normalize all th
 For the structure of the network, we use layers of neurons with a linear activation function. Between each layer we add a ReLU layer. We tested many network structures (number of layers and number of neurons per layer).
 
 For the training of our network we use the following parameters:
--optimizer: Adam
+- optimizer: Adam
 - learning rate: 1e-4
 - number of epochs: 10
 - batch size: 1

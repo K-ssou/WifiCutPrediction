@@ -27,7 +27,7 @@ Next, we divide our data set into training set and test set and normalize all th
 For the structure of the network, we use layers of neurons with a linear activation function. Between each layer we add a ReLU layer. We tested many network structures (number of layers and number of neurons per layer).
 
 For the training of our network we use the following parameters:
--optimizer: Adam
+- optimizer: Adam
 - learning rate: 1e-4
 - number of epochs: 10
 - batch size: 1

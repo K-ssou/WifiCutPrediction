@@ -67,3 +67,9 @@ clf = AdaBoostClassifier(random_state=96, base_estimator=RandomForestClassifier(
     random_state=101), n_estimators=100, learning_rate=0.01)
 clf.fit(train_x, train_y)
 print(f"TestAcc = {clf.score(test_x, test_y)}%")
+
+
+# Slot d'1h ?
+# Calcul TP/TN/FP/FN -> pour 1 / pour 0
+
+# Lundi ou le 15, aprem sinon semaine suivante lundi avant 16H (10H) ou le mardi ou mecredi

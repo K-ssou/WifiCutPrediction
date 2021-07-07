@@ -51,7 +51,7 @@ def Parser(filename):
 # IMEI = "bd0d04ef821fa7df8de5a4f1b0d2633d704809f1acd6b3faf780e560c5af4278"
 # IMEI = "677aba9f4c7375c0ac5443d680b6114cd0d36983342aca01e84e8afd907396ec"
 IMEI = "63cdb165eda519857699323789e720c662592e869104383a4523c15198b5f510"
-filename = "/home/cgilet/Codes/Reseau3/Data/ADA_cuts_{}.txt".format(IMEI[:4])
+filename = "/home/cgilet/Reseau3/Data/ADA_cuts_{}.txt".format(IMEI[:4])
 
 X, Y = Parser(filename)
 
