@@ -71,5 +71,3 @@ print(f"TestAcc = {clf.score(test_x, test_y)}%")
 
 # Slot d'1h ?
 # Calcul TP/TN/FP/FN -> pour 1 / pour 0
-
-# Lundi ou le 15, aprem sinon semaine suivante lundi avant 16H (10H) ou le mardi ou mecredi
