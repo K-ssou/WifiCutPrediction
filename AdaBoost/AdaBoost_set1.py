@@ -39,7 +39,7 @@ def Parser(filename):
 
 
 IMEI = "63cdb165eda519857699323789e720c662592e869104383a4523c15198b5f510"
-filename = "/home/cgilet/Codes/Reseau1/Data/ADA_cuts_{}.txt".format(IMEI[:4])
+filename = "/home/cgilet/Reseau1/Data/ADA_cuts_{}.txt".format(IMEI[:4])
 
 X, Y = Parser(filename)
 

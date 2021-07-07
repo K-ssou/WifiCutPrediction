@@ -14,18 +14,21 @@ import math
 
 # Define our own loss to weight the loss
 # Give a higher weight to penalize the non-detection of a cut
+
+
 class customloss(torch.nn.Module):
     def __init__(self):
         super(customloss, self).__init__()
 
     def forward(self, pred, tensor_y):
         eps = 0.4  # Accept the prediction if |pred - real|<eps
+        taux = 200
         diff = abs(pred - tensor_y)
         mask_diff = (diff >= eps).float()
         mask_cut = (tensor_y == 1).float()
 
         loss_val = (
-            (200 * mask_cut + 10) * mask_diff * diff
+            (taux * mask_cut + 10) * mask_diff * diff
         )  # Change the values of weight
         return torch.sum(loss_val)
 
@@ -56,7 +59,7 @@ def Parser(filename):
 # IMEI = "bd0d04ef821fa7df8de5a4f1b0d2633d704809f1acd6b3faf780e560c5af4278"
 # IMEI = "677aba9f4c7375c0ac5443d680b6114cd0d36983342aca01e84e8afd907396ec"
 IMEI = "63cdb165eda519857699323789e720c662592e869104383a4523c15198b5f510"
-filename = "/home/cgilet/Codes/Reseau1/Data/ADA_cuts_{}.txt".format(IMEI[:4])
+filename = "/home/cgilet/Reseau1/Data/ADA_cuts_{}.txt".format(IMEI[:4])
 
 X, Y = Parser(filename)
 
@@ -81,6 +84,8 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 print("Using {} device".format(device))
 
 # Define model
+
+
 class NeuralNetwork(nn.Module):
     def __init__(self):
         super(NeuralNetwork, self).__init__()
