@@ -39,7 +39,7 @@ def Parser(filename):
 
 
 IMEI = "63cdb165eda519857699323789e720c662592e869104383a4523c15198b5f510"
-filename = "/home/cgilet/Reseau1/Data/ADA_cuts_{}.txt".format(IMEI[:4])
+filename = "/home/cgilet/AdaBoost/Data/ADA_cuts_{}.txt".format(IMEI[:4])
 
 X, Y = Parser(filename)
 
@@ -51,23 +51,53 @@ print(f"Pourcentage de 1 : {nb_1/len(Y)*100}")
 train_x, test_x, train_y, test_y = train_test_split(
     X, Y, random_state=101, stratify=Y)
 
-print("AdaBoost")
+print("-----AdaBoost-----")
+
 
 clf = AdaBoostClassifier(random_state=96)
 print(clf.fit(train_x, train_y))
 print(f"TrainAcc = {clf.score(train_x, train_y)*100}%")
 print(f"TestAcc = {clf.score(test_x, test_y)*100}%")
 
+TP = 0
+TN = 0
+FP = 0
+FN = 0
+predictions = clf.predict(X)
+true = (predictions == Y)
+TP = sum(true*Y)
+TN = sum(true)-TP
+false = (predictions != Y)
+FN = sum(false*Y)
+FP = sum(false)-FN
+
+print(f"TP = {TP}")
+print(f"TN = {TN}")
+print(f"FP = {FP}")
+print(f"FN = {FN}")
 
 ############################## RandomForestClassifier ###########################################
 
-print("RandomForest")
+print("-----RandomForest-----")
 
 clf = AdaBoostClassifier(random_state=96, base_estimator=RandomForestClassifier(
     random_state=101), n_estimators=100, learning_rate=0.01)
 clf.fit(train_x, train_y)
-print(f"TestAcc = {clf.score(test_x, test_y)}%")
+print(f"TestAcc = {clf.score(test_x, test_y)*100}%")
 
+TP = 0
+TN = 0
+FP = 0
+FN = 0
+predictions = clf.predict(X)
+true = (predictions == Y)
+TP = sum(true*Y)
+TN = sum(true)-TP
+false = (predictions != Y)
+FN = sum(false*Y)
+FP = sum(false)-FN
 
-# Slot d'1h ?
-# Calcul TP/TN/FP/FN -> pour 1 / pour 0
+print(f"TP = {TP}")
+print(f"TN = {TN}")
+print(f"FP = {FP}")
+print(f"FN = {FN}")
