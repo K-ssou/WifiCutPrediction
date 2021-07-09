@@ -82,7 +82,7 @@ print("RandomForest")
 clf = AdaBoostClassifier(random_state=96, base_estimator=RandomForestClassifier(
     random_state=101), n_estimators=100, learning_rate=0.01)
 clf.fit(train_x, train_y)
-print(f"TestAcc = {clf.score(test_x, test_y)}%")
+print(f"TestAcc = {clf.score(test_x, test_y)*100}%")
 
 TP = 0
 TN = 0
