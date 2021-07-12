@@ -2,32 +2,44 @@ import torch
 from torch import nn
 import numpy as np
 
-text = ["hey how are you", "good i am fine", "have a nice day"]
+# Parse the cut file in tensor for the network
 
-# Join all the sentences together and extract the unique characters from the combined sentences
-chars = set("".join(text))
 
-# Creating a dictionary that maps integers to the characters
-int2char = dict(enumerate(chars))
+def Parser(filename):
+    X = []
+    y = []
+    f = open(filename, 'r')
+    text = f.readlines()
+    l = len(text)
+    for i in range(l):
+        line = text[i]
+        line = line.replace('\n', "")
+        bouts_line = line.split(' ')
+        y.append(int(bouts_line[0]))
+        data = []
+        for i in range(len(bouts_line)-1):
+            data.append(float(bouts_line[i]))
+        X.append(data)
+    cut = y.copy()
+    for i in range(l):  # Changement de features
+        prev = 1
+        nex = 1
+        while (i - prev) >= 0 and cut[i - prev] != 1:
+            prev += 1
+        while (i + nex) <= (l-1) and cut[i + nex] != 1:
+            nex += 1
+        X[i][0] = prev
+        y[i] = nex
+    return (X, y)
 
-# Creating another dictionary that maps characters to integers
-char2int = {char: ind for ind, char in int2char.items()}
 
-# Finding the length of the longest string in our data
-maxlen = len(max(text, key=len))
-
-# Padding
-
-# A simple loop that loops through the list of sentences and adds a ' ' whitespace until the length of
-# the sentence matches the length of the longest sentence
-for i in range(len(text)):
-    while len(text[i]) < maxlen:
-        text[i] += " "
+IMEI = "63cdb165eda519857699323789e720c662592e869104383a4523c15198b5f510"
+filename = "/home/cgilet/Reseau1/Data/ADA_cuts_{}.txt".format(IMEI[:4])
 
 # Creating lists that will hold our input and target sequences
-input_seq = []
-target_seq = []
+input_seq, target_seq = Parser(filename)
 
+"""
 for i in range(len(text)):
     # Remove last character for input sequence
     input_seq.append(text[i][:-1])
@@ -35,14 +47,7 @@ for i in range(len(text)):
     # Remove first character for target sequence
     target_seq.append(text[i][1:])
     print("Input Sequence: {}\nTarget Sequence: {}".format(input_seq[i], target_seq[i]))
-
-for i in range(len(text)):
-    input_seq[i] = [char2int[character] for character in input_seq[i]]
-    target_seq[i] = [char2int[character] for character in target_seq[i]]
-
-dict_size = len(char2int)
-seq_len = maxlen - 1
-batch_size = len(text)
+"""
 
 
 def one_hot_encode(sequence, dict_size, seq_len, batch_size):
@@ -57,8 +62,8 @@ def one_hot_encode(sequence, dict_size, seq_len, batch_size):
 
 
 # Input shape --> (Batch Size, Sequence Length, One-Hot Encoding Size)
-input_seq = one_hot_encode(input_seq, dict_size, seq_len, batch_size)
-
+#input_seq = one_hot_encode(input_seq, dict_size, seq_len, batch_size)
+input_seq = np.array(input_seq)
 input_seq = torch.from_numpy(input_seq)
 target_seq = torch.Tensor(target_seq)
 
@@ -112,7 +117,8 @@ class Model(nn.Module):
 
 
 # Instantiate the model with hyperparameters
-model = Model(input_size=dict_size, output_size=dict_size, hidden_dim=12, n_layers=1)
+model = Model(input_size=len(input_seq[0]),
+              output_size=1, hidden_dim=12, n_layers=1)
 # We'll also set the model to the device that we defined earlier (default is CPU)
 model.to(device)
 
@@ -127,7 +133,7 @@ optimizer = torch.optim.Adam(model.parameters(), lr=lr)
 # Training Run
 for epoch in range(1, n_epochs + 1):
     optimizer.zero_grad()  # Clears existing gradients from previous epoch
-    input_seq.to(device)
+    # input_seq.to(device)
     output, hidden = model(input_seq)
     loss = criterion(output, target_seq.view(-1).long())
     loss.backward()  # Does backpropagation and calculates gradients
@@ -138,6 +144,7 @@ for epoch in range(1, n_epochs + 1):
         print("Loss: {:.4f}".format(loss.item()))
 
 # This function takes in the model and character as arguments and returns the next character prediction and hidden state
+"""
 def predict(model, character):
     # One-hot encoding our input to fit into the model
     character = np.array([[char2int[c] for c in character]])
@@ -153,7 +160,8 @@ def predict(model, character):
 
     return int2char[char_ind], hidden
 
-
+"""
+"""
 # This function takes the desired output length and input characters as arguments, returning the produced sentence
 def sample(model, out_len, start="hey"):
     model.eval()  # eval mode
@@ -170,3 +178,4 @@ def sample(model, out_len, start="hey"):
 
 
 sample(model, 15, "good")
+"""

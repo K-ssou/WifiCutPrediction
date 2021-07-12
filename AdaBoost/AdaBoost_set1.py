@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 from torch.utils.data import Dataset
 import random
 import math
+from sklearn.tree import DecisionTreeClassifier
 
 # Parse the cut file in tensor for the network
 
@@ -54,7 +55,7 @@ train_x, test_x, train_y, test_y = train_test_split(
 print("AdaBoost")
 
 clf = AdaBoostClassifier(random_state=96)
-print(clf.fit(train_x, train_y))
+clf.fit(train_x, train_y)
 print(f"TrainAcc = {clf.score(train_x, train_y)*100}%")
 print(f"TestAcc = {clf.score(test_x, test_y)*100}%")
 
@@ -79,8 +80,8 @@ print(f"FN = {FN}")
 
 print("RandomForest")
 
-clf = AdaBoostClassifier(random_state=96, base_estimator=RandomForestClassifier(
-    random_state=101), n_estimators=100, learning_rate=0.01)
+clf = AdaBoostClassifier(random_state=96, base_estimator=DecisionTreeClassifier(
+    random_state=101), n_estimators=200, learning_rate=0.5)
 clf.fit(train_x, train_y)
 print(f"TestAcc = {clf.score(test_x, test_y)*100}%")
 
@@ -100,3 +101,37 @@ print(f"TP = {TP}")
 print(f"TN = {TN}")
 print(f"FP = {FP}")
 print(f"FN = {FN}")
+print(f"Sensitivity : {TP/(FN+TP)}")
+print(f"Specificity : {TN/(FP+TN)}")
+
+################################## RESULTS #################################################
+"""clf = AdaBoostClassifier(random_state=96, base_estimator=RandomForestClassifier(random_state=101), n_estimators=100, learning_rate=0.01)
+TP = 260
+TN = 9424
+FP = 35
+FN = 115
+"""
+
+""" clf = AdaBoostClassifier(random_state=96, base_estimator=DecisionTreeClassifier(
+    random_state=101), n_estimators=100, learning_rate=0.01)
+TP = 263
+TN = 9372
+FP = 87
+FN = 112
+"""
+
+"""clf = AdaBoostClassifier(random_state=96, base_estimator=DecisionTreeClassifier(
+    random_state=101), n_estimators=100, learning_rate=0.5)
+TP = 286
+TN = 9380
+FP = 79
+FN = 89
+"""
+
+"""clf = AdaBoostClassifier(random_state=96, base_estimator=DecisionTreeClassifier(
+    random_state=101), n_estimators=200, learning_rate=0.5)
+TP = 288
+TN = 9374
+FP = 85
+FN = 87
+"""

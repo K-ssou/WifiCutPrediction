@@ -1,0 +1,6 @@
+1- Ajouter batch (100)
+2- Simplifier le reseau (2 couches avec 5 neurones)
+3- Sortir la prédiction du réseau
+4- Classification KNN? Avec T-SNE avant pour voir (visualisation)
+5- One-hot encoding (ajouter 7 features ) ou 2 (we/wd)
+6- Tester avec d'autres tels
