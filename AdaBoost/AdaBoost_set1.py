@@ -34,13 +34,23 @@ def Parser(filename):
         y.append(int(bouts_res[0]))
         data = []
         for i in range(len(bouts_line) - 1):
-            data.append(float(bouts_line[i]))
+            if i == 4:
+                for j in range(7):
+                    data.append(0)
+                data[int(i+float(bouts_line[i]))] = 1
+            else:
+                data.append(float(bouts_line[i]))
         X.append(data)
     return (X, y)
 
 
 IMEI = "63cdb165eda519857699323789e720c662592e869104383a4523c15198b5f510"
-filename = "/home/cgilet/Reseau1/Data/ADA_cuts_{}.txt".format(IMEI[:4])
+#IMEI = "677aba9f4c7375c0ac5443d680b6114cd0d36983342aca01e84e8afd907396ec"
+#IMEI = "bd0d04ef821fa7df8de5a4f1b0d2633d704809f1acd6b3faf780e560c5af4278"
+#slot = "15mn"
+slot = "1h"
+filename = "/home/cgilet/AdaBoost/Data/ADA_cuts_{}_{}.txt".format(
+    IMEI[:4], slot)
 
 X, Y = Parser(filename)
 
@@ -97,6 +107,9 @@ false = (predictions != Y)
 FN = sum(false*Y)
 FP = sum(false)-FN
 
+print(f"nombre de mesures : {len(Y)}")
+print(f"nombre de cuts : {sum(Y)}")
+print(f"nombre de mesures sans cut : {len(Y)-sum(Y)}")
 print(f"TP = {TP}")
 print(f"TN = {TN}")
 print(f"FP = {FP}")
@@ -134,4 +147,135 @@ TP = 288
 TN = 9374
 FP = 85
 FN = 87
+"""
+
+
+##################################### With 1 feature/day #######################################
+"""
+def Parser(filename):
+    X = []
+    y = []
+    f = open(filename, "r")
+    text = f.readlines()
+    l = len(text)
+    for i in range(l - 1):
+        line = text[i]
+        line = line.replace("\n", "")
+        result = text[i + 1]
+        result = result.replace("\n", "")
+        bouts_line = line.split(" ")
+        bouts_res = result.split(" ")
+        y.append(int(bouts_res[0]))
+        data = []
+        for i in range(len(bouts_line) - 1):
+            if i == 4:
+                for j in range(7):
+                    data.append(0)
+                data[int(i+float(bouts_line[i]))] = 1
+            else:
+                data.append(float(bouts_line[i]))
+        X.append(data)
+    return (X, y)
+"""
+"""
+TestAcc = 94.63196421309476%
+TP = 280
+TN = 9391
+FP = 68
+FN = 95
+Sensitivity : 0.7466666666666667
+Specificity : 0.9928110793952849
+"""
+
+############## With 1 feature week + 1 feature we ##################################
+"""def Parser(filename):
+    X = []
+    y = []
+    f = open(filename, "r")
+    text = f.readlines()
+    l = len(text)
+    for i in range(l - 1):
+        line = text[i]
+        line = line.replace("\n", "")
+        result = text[i + 1]
+        result = result.replace("\n", "")
+        bouts_line = line.split(" ")
+        bouts_res = result.split(" ")
+        y.append(int(bouts_res[0]))
+        data = []
+        for i in range(len(bouts_line) - 1):
+            if i == 4 and float(bouts_line[i]) < 5:
+                data.append(1)
+                data.append(0)
+            elif i == 4 and float(bouts_line[i]) >= 5:
+                data.append(0)
+                data.append(1)
+            else:
+                data.append(float(bouts_line[i]))
+        X.append(data)
+    return (X, y)
+"""
+"""
+TestAcc = 94.63196421309476%
+TP = 220
+TN = 9405
+FP = 54
+FN = 155
+Sensitivity : 0.5866666666666667
+Specificity : 0.994291151284491
+"""
+
+
+####################### Slot 15mn #####################################
+"""
+TestAcc = 86.5040650406504%
+nombre de mesures : 2460
+nombre de cuts : 286
+nombre de mesures sans cut : 2174
+TP = 216
+TN = 2134
+FP = 40
+FN = 70
+Sensitivity : 0.7552447552447552
+Specificity : 0.9816007359705612
+"""
+
+###################### Other phone ##################################
+""" 677a
+TestAcc = 80.66914498141264%
+nombre de mesures : 1075
+nombre de cuts : 154
+nombre de mesures sans cut : 921
+TP = 99
+TN = 892
+FP = 29
+FN = 55
+Sensitivity : 0.6428571428571429
+Specificity : 0.9685124864277959
+"""
+
+""" bd0d
+TestAcc = 81.66666666666667%
+nombre de mesures : 1197
+nombre de cuts : 205
+nombre de mesures sans cut : 992
+TP = 162
+TN = 958
+FP = 34
+FN = 43
+Sensitivity : 0.7902439024390244
+Specificity : 0.9657258064516129
+"""
+
+""" 63cd
+TestAcc = 86.5040650406504%
+nombre de mesures : 2460
+nombre de cuts : 286
+nombre de mesures sans cut : 2174
+TP = 216
+TN = 2134
+FP = 40
+FN = 70
+Sensitivity : 0.7552447552447552
+Specificity : 0.9816007359705612
 """

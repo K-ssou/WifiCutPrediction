@@ -41,8 +41,8 @@ algo = sys.argv[2]
 
 # number of 15 minutes slots that defines the horizon of prediction.
 # horizons = [Fraction(1,3)]
-# horizons = [4] # 1-hour slot
-horizons = [1]  # 15 min slot
+horizons = [4]  # 1-hour slot
+# horizons = [1]  # 15 min slot
 # horizons = [1,4]
 
 # AVG parameters
