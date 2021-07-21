@@ -66,4 +66,7 @@ Accuracy.xlsx :
 In this file, you will find some results obtained for our different networks.
 The different columns correspond to the different epochs of each network.
 
+AdaBoostResults.xls : 
+This file contains the Sensitivity and Specificity for datasets with differents features and time slots from differents phones.
+
 For lines, you will find the accuracy for the detection of 0s and 1s according to the different parameters.
