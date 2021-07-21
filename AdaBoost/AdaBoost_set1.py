@@ -44,8 +44,15 @@ def Parser(filename):
     return (X, y)
 
 
-IMEI = "63cdb165eda519857699323789e720c662592e869104383a4523c15198b5f510"
-#IMEI = "677aba9f4c7375c0ac5443d680b6114cd0d36983342aca01e84e8afd907396ec"
+#IMEI = "46bd"
+#IMEI = "203a"
+#IMEI = "936f"
+#IMEI = "4517"
+#IMEI = "bacd"
+#IMEI = "e6d2"
+#IMEI = "f1d9"
+IMEI = "63cd"
+#IMEI = "677a"
 #IMEI = "bd0d04ef821fa7df8de5a4f1b0d2633d704809f1acd6b3faf780e560c5af4278"
 #slot = "15mn"
 slot = "1h"

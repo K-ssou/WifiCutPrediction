@@ -43,7 +43,7 @@ algo = sys.argv[2]
 # horizons = [Fraction(1,3)]
 horizons = [4]  # 1-hour slot
 # horizons = [1]  # 15 min slot
-# horizons = [1,4]
+# horizons = [1, 4]
 
 # AVG parameters
 NbRand = [10000]
