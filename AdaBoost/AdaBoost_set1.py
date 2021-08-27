@@ -92,13 +92,15 @@ print(f"TP = {TP}")
 print(f"TN = {TN}")
 print(f"FP = {FP}")
 print(f"FN = {FN}")
+print(f"Sensitivity : {TP/(FN+TP)}")
+print(f"Specificity : {TN/(FP+TN)}")
 
 ############################## RandomForestClassifier ###########################################
 
 print("RandomForest")
 
 clf = AdaBoostClassifier(random_state=96, base_estimator=DecisionTreeClassifier(
-    random_state=101), n_estimators=200, learning_rate=0.5)
+    random_state=101), n_estimators=200, learning_rate=0.9)
 clf.fit(train_x, train_y)
 print(f"TestAcc = {clf.score(test_x, test_y)*100}%")
 
